@@ -13,6 +13,16 @@ val brandAssets = tasks.register<Copy>("brandAssets") {
     into(layout.buildDirectory.dir("generated/brand"))
 }
 
+// FullCalendar ships its styles as plain CSS inside the npm package: the skeleton (layout) and one
+// theme. They are copied out of the npm workspace so the demo renders without pulling anything from
+// a CDN at test time.
+val calendarStyles = tasks.register<Copy>("calendarStyles") {
+    from(rootProject.layout.projectDirectory.dir("build/js/node_modules/fullcalendar")) {
+        include("skeleton.css", "themes/classic/theme.css", "themes/classic/palette.css")
+    }
+    into(layout.buildDirectory.dir("generated/calendar"))
+}
+
 kotlin {
     js {
         useEsModules()
@@ -29,11 +39,12 @@ kotlin {
     sourceSets {
         jsMain {
             resources.srcDir(brandAssets)
+            resources.srcDir(calendarStyles)
         }
         jsMain.dependencies {
             implementation("org.jetbrains.kotlin-wrappers:kotlin-browser:2026.11.1")
             // The published modules the demo demonstrates, one line each.
-            implementation(project(":ktjs-wrapper-template-core"))
+            implementation(project(":ktjs-fullcalendar"))
         }
 
         jvmTest.dependencies {
@@ -50,7 +61,9 @@ kotlin {
 // `srcDir(task)` contributes the directory but not the task dependency; resource processing is what
 // reads that directory, so the edge belongs there.
 tasks.named("jsProcessResources") {
-    dependsOn(brandAssets)
+    // `kotlinNpmInstall` is a root-project task: the npm workspace is shared by every module.
+    dependsOn(brandAssets, calendarStyles)
+    mustRunAfter(rootProject.tasks.named("kotlinNpmInstall"))
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -72,7 +85,7 @@ tasks.register<Test>("e2eTest") {
     dependsOn("jsBrowserDistribution")
     // The Chromium is installed for the Kotlin/JS browser tests of the wrapper module, and this suite
     // reuses it. A derived project points this at its own first published module.
-    dependsOn(":ktjs-wrapper-template-core:kotlinInstallPlaywrightBrowsers")
+    dependsOn(":ktjs-fullcalendar:kotlinInstallPlaywrightBrowsers")
 
     testClassesDirs = jvmE2eCompilation.output.classesDirs
     classpath = files(jvmE2eCompilation.output.allOutputs, jvmE2eCompilation.runtimeDependencyFiles)

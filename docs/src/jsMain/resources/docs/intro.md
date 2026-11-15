@@ -5,37 +5,27 @@ title: Introduction
 
 # Introduction
 
-`ktjs-wrapper-template` is a starting point for Kotlin/JS wrappers around npm packages, mostly Web
-Components. It is deliberately **not** a scaffold full of placeholders: the repository is a complete
-project that builds, tests in a real browser, documents itself and deploys to GitHub Pages, so copying
-it gives you something that runs on the first `./gradlew build`.
+`ktjs-fullcalendar` is a Kotlin/JS wrapper for [`fullcalendar`](https://github.com/fullcalendar/fullcalendar) from [FullCalendar](https://github.com/fullcalendar/fullcalendar) 7.1.5: every type and member of
+the upstream `.d.ts` files becomes an `external` declaration the compiler checks, with no
+`dynamic` fallback.
 
-## What is in it
+The wrapped surface is the vanilla calendar of the `fullcalendar` 7 package: `createCalendar()` around the `Calendar` class, the typed `CalendarOptions` builder, the `EventInput` / `EventApi` / `EventSourceApi` / `ViewApi` handles, the click and selection info objects, and the six view plugins shipped as `fullcalendar/daygrid`, `timegrid`, `multimonth`, `list`, `interaction` and `all`.
 
-| Part | Role |
-| --- | --- |
-| `ktjs-wrapper-template-core` | the sample wrapper: `@vaadin/button` 25.3.5. One npm package, one Gradle module, one Kotlin package — copy it for the next package |
-| `demo` | a page that creates two `<vaadin-button>` elements through the wrapper; published under `/demo/` |
-| `docs` | this site: Kotlin configuration, Markdown pages, built by the [ktjs-docusaurus](https://github.com/shijianjs/ktjs-docusaurus) Gradle plugin |
-| the rest | npm versions in one `package.json`, per-module `-kt.N` revisions, Detekt, Playwright browser tests, Maven Central release through the hub, Pages workflow |
+## What is wrapped
 
-The API reference under `/api/` is Dokka output for the published modules — the same Dokka run that
-`pagesSite` assembles next to this site.
+| Module | Gradle artifact | Upstream |
+| --- | --- | --- |
+| `ktjs-fullcalendar` | `io.github.shijianjs:ktjs-fullcalendar` | `fullcalendar` 7.1.5 (one npm package with sub-path entries) |
+
+Upstream is a monorepo of npm packages; only the published `fullcalendar` entry point is wrapped, and every sub-path (`fullcalendar/daygrid`, …) lands in the same Kotlin package as a `JsModule` object.
+
+## License
+
+The wrapper itself is MIT. The upstream `fullcalendar` license differs from it — read the
+[license notes](guide/license.md) before shipping it commercially.
 
 ## Where to go next
 
-- [Getting started](guide/getting-started.md) — build it, test it, run the dev server.
-- [Deriving a project](guide/deriving-a-project.md) — the rename checklist for turning this into your
-  own wrapper.
-
-## How the pieces fit together
-
-```mermaid
-flowchart TB
-  T["ktjs-wrapper-template<br/>(copy me)"] --> C["core: the sample wrapper"]
-  T --> D["demo: a runnable page"]
-  T --> G["docs: this site"]
-  C --> V["@vaadin/button"]
-  G --> B["ktjs-docusaurus<br/>Gradle plugin"]
-  B --> P["GitHub Pages"]
-```
+- [Getting started](guide/getting-started.md) — add the dependency, make the first call, run the build.
+- [API overview](guide/api-overview.md) — package layout, type mapping conventions, common patterns.
+- [Demo](guide/demo.md) — see it running in the browser.
