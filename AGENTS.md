@@ -597,3 +597,26 @@ klibs.io 从 Maven Central 与 GitHub 自动抓取，无需提交元数据文件
 - 优先就地修改或扩展现有小节，不要为同一主题新开重复小节。
 - 从模板升级派生项目时仍从模板仓库 `git diff` 取变更后人工 cherry-pick，不要用派生项目的其他文件
   反向覆盖模板。
+
+## 演示页：桥到 `ktjs-demo-kit`
+
+`demo/` 的页面骨架由 `ktjs-demo-kit` 提供（`Main.kt` 挂 `DemoLayout`，`SiteMenu.kt` 描述路由，
+`SiteTexts.kt` 声明文案，`page/<组>/` 只有内容），本仓库只补日历这一层。约定与其余 wrapper 仓库相同，
+日历特有的四条：
+
+- **主题是插件**：`fullcalendar/themes/<name>` 导出的是一个插件值，必须和视图插件一起挂进
+  `calendarOptions.plugins`，否则 JS 只发骨架类名、`themes/<name>/theme.css` 一条规则都匹配不上，
+  画面无边框、无颜色、无事件胶囊，而且**不报错**。wrapper 暴露 `classicThemePlugin` /
+  `monarchThemePlugin` / `breezyThemePlugin` / `formaThemePlugin` / `pulseThemePlugin`。
+- **三份样式表要在 `index.html` 里链、在页面里 `addLinkedSheet` 再挂一遍**：`skeleton.css`、
+  `themes/classic/palette.css`、`themes/classic/theme.css`。库本身不改 shadow 树的样式，
+  document 上的 `<link>` 进不了本页 shadow root。
+- **`palette.css` 的 token 定义在 `:root`**，shadow 树里 `:root` 永不匹配，所以 `var(--fc-classic-*)`
+  全失效。`DemoPage.addLinkedSheet` 把每份被复制规则里的 `:root` 改写成 `:host`（`hostScoped`），
+  token 因此随继承进入子树；这也适用于其它把 token 写在 `:root` 的库。
+- **容器要等布局**：`createOnceMounted()` 等到 `clientWidth >= 200` 才 `createCalendar`，
+  否则引擎按 0 宽算列宽。视图与语言由 `setOption` / `changeView` 驱动，不重建日历——
+  重建会丢掉滚动位置，语言切换只需要重写事件标题（`getEventById(...)?.setProp("title", ...)`）。
+
+页面用宿主属性 `data-calendar` / `data-status`（带 `data-view`、`data-type`）暴露运行期状态，
+e2e 因此不用猜内部类名（FullCalendar 7 的类名是哈希过的）。

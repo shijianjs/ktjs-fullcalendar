@@ -77,6 +77,53 @@ external object AllModule {
     val plugin: JsAny
 }
 
+/**
+ * `fullcalendar/themes/classic` — the theme every shipped stylesheet is painted for.
+ *
+ * FullCalendar 7 treats themes as plugins: without this one, the JS emits the *skeleton* class names
+ * only, so `themes/classic/theme.css` matches nothing and the calendar renders with no borders, no
+ * colours and no event pills — silently. Each theme has its own `theme.css` + `palette.css`, and the
+ * class names they use are the ones the matching plugin emits.
+ */
+@JsModule("fullcalendar/themes/classic")
+external object ClassicThemeModule {
+    /** The plugin value. */
+    @JsName("default")
+    val plugin: JsAny
+}
+
+/** `fullcalendar/themes/monarch`. */
+@JsModule("fullcalendar/themes/monarch")
+external object MonarchThemeModule {
+    /** The plugin value. */
+    @JsName("default")
+    val plugin: JsAny
+}
+
+/** `fullcalendar/themes/breezy`. */
+@JsModule("fullcalendar/themes/breezy")
+external object BreezyThemeModule {
+    /** The plugin value. */
+    @JsName("default")
+    val plugin: JsAny
+}
+
+/** `fullcalendar/themes/forma`. */
+@JsModule("fullcalendar/themes/forma")
+external object FormaThemeModule {
+    /** The plugin value. */
+    @JsName("default")
+    val plugin: JsAny
+}
+
+/** `fullcalendar/themes/pulse`. */
+@JsModule("fullcalendar/themes/pulse")
+external object PulseThemeModule {
+    /** The plugin value. */
+    @JsName("default")
+    val plugin: JsAny
+}
+
 /** The day grid plugin. */
 val dayGridPlugin: JsAny get() = DayGridModule.plugin
 
@@ -94,6 +141,21 @@ val interactionPlugin: JsAny get() = InteractionModule.plugin
 
 /** All view plugins bundled together. */
 val allPlugins: JsAny get() = AllModule.plugin
+
+/** The classic theme plugin; pair it with `themes/classic/theme.css` and `palette.css`. */
+val classicThemePlugin: JsAny get() = ClassicThemeModule.plugin
+
+/** The monarch theme plugin. */
+val monarchThemePlugin: JsAny get() = MonarchThemeModule.plugin
+
+/** The breezy theme plugin. */
+val breezyThemePlugin: JsAny get() = BreezyThemeModule.plugin
+
+/** The forma theme plugin. */
+val formaThemePlugin: JsAny get() = FormaThemeModule.plugin
+
+/** The pulse theme plugin. */
+val pulseThemePlugin: JsAny get() = PulseThemeModule.plugin
 
 /** Creates a calendar rendering into [element] with [options]. */
 fun createCalendar(element: HTMLElement, options: CalendarOptions): Calendar =
