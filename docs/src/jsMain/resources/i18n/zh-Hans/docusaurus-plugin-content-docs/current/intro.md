@@ -17,6 +17,21 @@ title: 简介
 | `ktjs-fullcalendar` | `io.github.shijianjs:ktjs-fullcalendar` | `fullcalendar` 7.1.5（单个 npm 包，多个子路径入口） |
 
 上游是 npm 包 monorepo；这里只封装已发布的 `fullcalendar` 入口，所有子路径（`fullcalendar/daygrid` 等）都以 `JsModule` 对象的形式落在同一个 Kotlin 包里。
+```mermaid
+flowchart TB
+  NPM["npm：fullcalendar 7.1.5"] --> CC["createCalendar(el, options)"]
+  CC --> CAL["Calendar<br/>next、prev、today、setOption、addEventSource"]
+  NPM --> PL["子路径插件<br/>daygrid、list、interaction、timegrid、multimonth、adaptive"]
+  PL --> MOD["JsModule 对象<br/>同一个 Kotlin 包"]
+  NPM --> API["EventInput / EventApi / EventSourceApi / ViewApi<br/>点击与选择信息"]
+  CAL --> K["io.github.shijianjs.ktjs.fullcalendar"]
+  MOD --> K
+  API --> K
+  K --> D["演示页：月视图 + 两种视图"]
+```
+
+日历是一个对象加一份选项：wrapper 要做的是让每个选项名、每个事件字段都是类型化成员，而不是字符串键。
+
 
 ## 许可证
 

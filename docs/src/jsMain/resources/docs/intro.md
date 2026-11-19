@@ -18,6 +18,22 @@ The wrapped surface is the vanilla calendar of the `fullcalendar` 7 package: `cr
 | `ktjs-fullcalendar` | `io.github.shijianjs:ktjs-fullcalendar` | `fullcalendar` 7.1.5 (one npm package with sub-path entries) |
 
 Upstream is a monorepo of npm packages; only the published `fullcalendar` entry point is wrapped, and every sub-path (`fullcalendar/daygrid`, …) lands in the same Kotlin package as a `JsModule` object.
+```mermaid
+flowchart TB
+  NPM["npm: fullcalendar 7.1.5"] --> CC["createCalendar(el, options)"]
+  CC --> CAL["Calendar<br/>next, prev, today, setOption, addEventSource"]
+  NPM --> PL["sub-path plugins<br/>daygrid, list, interaction, timegrid, multimonth, adaptive"]
+  PL --> MOD["JsModule objects<br/>same Kotlin package"]
+  NPM --> API["EventInput / EventApi / EventSourceApi / ViewApi<br/>click &amp; select info"]
+  CAL --> K["io.github.shijianjs.ktjs.fullcalendar"]
+  MOD --> K
+  API --> K
+  K --> D["demo: month view + two views"]
+```
+
+A calendar is one object with one options record: the wrapper's job is that every option name and every
+event field is a typed member rather than a string key.
+
 
 ## License
 

@@ -11,6 +11,14 @@ The demo page mounts the real FullCalendar 7 widget through the wrapper: a day g
 the interaction and list plugins loaded, three events added through the API, and buttons for
 previous, next, today plus a view switch between `dayGridMonth` and `listWeek`. The language switch
 changes the page text and calls `setOption("locale", …)` so the calendar's own labels follow too.
+```mermaid
+flowchart LR
+  OPT["dayGridMonth + listWeek plugins"] -->|"options"| CAL["Calendar instance"]
+  NAV["previous / next / today"] -->|"API calls"| CAL
+  VIEW["view switch"] -->|"changeView"| CAL
+  EVT["three events"] -->|"addEventSource"| CAL
+  LANG["language switch"] -->|"setOption(''locale'', …)"| CAL
+```
 
 The language button in the page header switches between English and Simplified Chinese: every
 visible string changes, not just the title.
