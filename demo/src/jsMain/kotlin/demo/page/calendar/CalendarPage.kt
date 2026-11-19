@@ -1,15 +1,17 @@
 package demo.page.calendar
 
+import io.github.shijianjs.ktjs.demo.page.DemoPage
+import io.github.shijianjs.ktjs.dom.webcomponent.defineIfMissing
+import web.components.CustomElementReference
+import web.dom.TagName
 import io.github.shijianjs.ktjs.demo.i18n.Binder
 import io.github.shijianjs.ktjs.demo.i18n.Lang
 import io.github.shijianjs.ktjs.demo.i18n.Langs
 import io.github.shijianjs.ktjs.demo.i18n.Translations
 import io.github.shijianjs.ktjs.demo.i18n.texts
-import io.github.shijianjs.ktjs.demo.nav.Page
 import io.github.shijianjs.ktjs.demo.page.Readout
 import io.github.shijianjs.ktjs.demo.page.exampleBox
 import io.github.shijianjs.ktjs.demo.page.grid
-import io.github.shijianjs.ktjs.demo.page.newPage
 import io.github.shijianjs.ktjs.demo.page.sectionBlock
 import io.github.shijianjs.ktjs.dom.element.invoke
 import io.github.shijianjs.ktjs.dom.element.unaryPlus
@@ -101,8 +103,7 @@ private val EVENT_DAYS: List<String> = listOf("2026-11-16", "2026-11-18", "2026-
  * [io.github.shijianjs.ktjs.demo.page.DemoPage.addLinkedSheet]. Missing them renders a calendar with no
  * grid at all.
  */
-internal class CalendarPage : Page {
-    private val page = newPage()
+internal class CalendarPage : DemoPage() {
 
     private val texts = Binder(calendarTexts)
 
@@ -124,12 +125,11 @@ internal class CalendarPage : Page {
         createButton { setAttribute("data-action", action.id) }
     }
 
-    override val node get() = page
 
     init {
-        page.addLinkedSheet("skeleton.css")
-        page.addLinkedSheet("themes/classic/palette.css")
-        page.addLinkedSheet("themes/classic/theme.css")
+        addLinkedSheet("skeleton.css")
+        addLinkedSheet("themes/classic/palette.css")
+        addLinkedSheet("themes/classic/theme.css")
 
         val section = sectionBlock()
         texts.bind(section.title, { it.calendarHeading })
@@ -140,7 +140,7 @@ internal class CalendarPage : Page {
             exampleBox(null, host),
         )
 
-        page.body.append(section.root)
+        body.append(section.root)
         status.root.setAttribute("data-status", "")
 
         buttons.forEachIndexed { index, button ->
@@ -208,8 +208,8 @@ internal class CalendarPage : Page {
 
     override fun applyTranslation(lang: Lang) {
         current = calendarTexts[lang]
-        page.setTitle(current.title)
-        page.setSummary(current.summary)
+        setTitle(current.title)
+        setSummary(current.summary)
         texts.apply(lang)
         buttons.forEachIndexed { index, button ->
             button.textContent = current.labels.getOrElse(index) { "" }
@@ -223,7 +223,21 @@ internal class CalendarPage : Page {
         created.setOption("locale", localeTag.unsafeCast<JsAny>())
         refresh(created)
     }
+
+    companion object : CustomElementReference<CalendarPage>(CalendarPage::class.js) {
+        val NAME: TagName<CalendarPage> = TagName("fullcalendar-calendar-page")
+
+        fun define() {
+            defineIfMissing(NAME, this)
+        }
+    }
 }
 
 /** Any Kotlin value as the `JsAny` the upstream API expects. */
 private fun Any.jsAny(): JsAny = this.unsafeCast<JsAny>()
+
+/** Creates a defined `<fullcalendar-calendar-page>`. */
+internal fun newCalendarPage(): CalendarPage {
+    CalendarPage.define()
+    return CalendarPage.NAME()
+}

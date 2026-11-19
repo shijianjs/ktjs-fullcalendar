@@ -1,7 +1,7 @@
 package demo
 
-import demo.page.calendar.CalendarPage
-import demo.page.overview.OverviewPage
+import demo.page.calendar.newCalendarPage
+import demo.page.overview.newOverviewPage
 import io.github.shijianjs.ktjs.demo.nav.DemoMenu
 import io.github.shijianjs.ktjs.demo.nav.Entry
 import io.github.shijianjs.ktjs.demo.nav.Group
@@ -29,7 +29,7 @@ internal val EXAMPLES: Group = Group("examples", "lucide:play")
  */
 fun siteMenu(): DemoMenu = DemoMenu(
     listOf(
-        Entry("overview", START, "lucide:sparkles") { OverviewPage() },
-        Entry("calendar", EXAMPLES, "lucide:calendar-days") { CalendarPage() },
+        Entry("overview", START, "lucide:sparkles") { newOverviewPage() },
+        Entry("calendar", EXAMPLES, "lucide:calendar-days") { newCalendarPage() },
     ),
 )
