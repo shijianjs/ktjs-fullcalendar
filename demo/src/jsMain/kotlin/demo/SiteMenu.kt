@@ -1,10 +1,11 @@
 package demo
 
-import demo.page.calendar.newCalendarPage
-import demo.page.overview.newOverviewPage
+import demo.page.calendar.CalendarPage
+import demo.page.overview.OverviewPage
 import io.github.shijianjs.ktjs.demo.nav.DemoMenu
 import io.github.shijianjs.ktjs.demo.nav.Entry
 import io.github.shijianjs.ktjs.demo.nav.Group
+import io.github.shijianjs.ktjs.dom.element.invoke
 
 /** The FullCalendar version this demo is built against; the navbar shows it under the site name. */
 const val SITE_VERSION: String = "7.1.5"
@@ -29,7 +30,7 @@ internal val EXAMPLES: Group = Group("examples", "lucide:play")
  */
 fun siteMenu(): DemoMenu = DemoMenu(
     listOf(
-        Entry("overview", START, "lucide:sparkles") { newOverviewPage() },
-        Entry("calendar", EXAMPLES, "lucide:calendar-days") { newCalendarPage() },
+        Entry("overview", START, "lucide:sparkles") { OverviewPage.NAME() },
+        Entry("calendar", EXAMPLES, "lucide:calendar-days") { CalendarPage.NAME() },
     ),
 )
