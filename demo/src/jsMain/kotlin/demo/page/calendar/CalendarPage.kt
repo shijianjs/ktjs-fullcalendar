@@ -32,49 +32,6 @@ import web.events.addHandler
 import web.html.HTMLElement
 import web.html.HtmlTagName
 
-private val calendarEnglish: CalendarTexts = CalendarTexts(
-    title = "Calendar",
-    summary = "The real FullCalendar engine behind the wrapper: a month grid with three events, a " +
-        "week list, and navigation through `prev`, `next`, `today` and `changeView`.",
-    calendarHeading = "Live calendar",
-    hint = "Every control below is the wrapper's API: `createCalendar`, `addEvent`, `prev`, `next`, " +
-        "`today`, `changeView` and `setOption`.",
-    labels = listOf("Previous", "Next", "Today", "Month", "List week"),
-    view = "Current view",
-    events = listOf("Wrapper release", "Docs review", "Nightly retro"),
-)
-
-private val calendarChinese: CalendarTexts = CalendarTexts(
-    title = "日历",
-    summary = "封装背后的真实 FullCalendar 引擎：带三个事件的月网格、周列表，以及通过 `prev`、`next`、" +
-        "`today`、`changeView` 完成的导航。",
-    calendarHeading = "实时日历",
-    hint = "下面每个控件都来自 wrapper 的 API：`createCalendar`、`addEvent`、`prev`、`next`、`today`、" +
-        "`changeView`、`setOption`。",
-    labels = listOf("上一页", "下一页", "今天", "月视图", "列表周"),
-    view = "当前视图",
-    events = listOf("封装发版", "文档评审", "夜间回顾"),
-)
-
-private val calendarTexts: Translations<CalendarTexts> = texts(
-    Langs.EN to calendarEnglish,
-    Langs.ZH_HANS to calendarChinese,
-)
-
-private val ACTIONS: List<Action> = listOf(
-    Action("prev") { page, calendar -> calendar.prev(); page.refresh(calendar) },
-    Action("next") { page, calendar -> calendar.next(); page.refresh(calendar) },
-    Action("today") { page, calendar -> calendar.today(); page.refresh(calendar) },
-    Action("month") { page, calendar -> page.showView(calendar, "dayGridMonth") },
-    Action("week") { page, calendar -> page.showView(calendar, "listWeek") },
-)
-
-/** The sample events' ids; the title is looked up by position so a language switch can rewrite it. */
-private val EVENT_IDS: List<String> = listOf("release", "review", "retro")
-
-/** The days the sample events sit on, one per id. */
-private val EVENT_DAYS: List<String> = listOf("2026-11-16", "2026-11-18", "2026-11-20")
-
 /**
  * The calendar page: a toolbar, the live calendar, and a readout of the view it is showing.
  *
@@ -204,7 +161,45 @@ internal class CalendarPage : DemoPage() {
         refresh(created)
     }
 
-    companion object : CustomElementReferenceAdapter<CalendarPage>(CalendarPage::class.js, "fullcalendar-calendar-page")
+    companion object : CustomElementReferenceAdapter<CalendarPage>(CalendarPage::class.js, "fullcalendar-calendar-page") {
+        private val calendarEnglish: CalendarTexts = CalendarTexts(
+            title = "Calendar",
+            summary = "The real FullCalendar engine behind the wrapper: a month grid with three events, a " +
+                "week list, and navigation through `prev`, `next`, `today` and `changeView`.",
+            calendarHeading = "Live calendar",
+            hint = "Every control below is the wrapper's API: `createCalendar`, `addEvent`, `prev`, `next`, " +
+                "`today`, `changeView` and `setOption`.",
+            labels = listOf("Previous", "Next", "Today", "Month", "List week"),
+            view = "Current view",
+            events = listOf("Wrapper release", "Docs review", "Nightly retro"),
+        )
+        private val calendarChinese: CalendarTexts = CalendarTexts(
+            title = "日历",
+            summary = "封装背后的真实 FullCalendar 引擎：带三个事件的月网格、周列表，以及通过 `prev`、`next`、" +
+                "`today`、`changeView` 完成的导航。",
+            calendarHeading = "实时日历",
+            hint = "下面每个控件都来自 wrapper 的 API：`createCalendar`、`addEvent`、`prev`、`next`、`today`、" +
+                "`changeView`、`setOption`。",
+            labels = listOf("上一页", "下一页", "今天", "月视图", "列表周"),
+            view = "当前视图",
+            events = listOf("封装发版", "文档评审", "夜间回顾"),
+        )
+        private val calendarTexts: Translations<CalendarTexts> = texts(
+            Langs.EN to calendarEnglish,
+            Langs.ZH_HANS to calendarChinese,
+        )
+        private val ACTIONS: List<Action> = listOf(
+            Action("prev") { page, calendar -> calendar.prev(); page.refresh(calendar) },
+            Action("next") { page, calendar -> calendar.next(); page.refresh(calendar) },
+            Action("today") { page, calendar -> calendar.today(); page.refresh(calendar) },
+            Action("month") { page, calendar -> page.showView(calendar, "dayGridMonth") },
+            Action("week") { page, calendar -> page.showView(calendar, "listWeek") },
+        )
+        /** The sample events' ids; the title is looked up by position so a language switch can rewrite it. */
+        private val EVENT_IDS: List<String> = listOf("release", "review", "retro")
+        /** The days the sample events sit on, one per id. */
+        private val EVENT_DAYS: List<String> = listOf("2026-11-16", "2026-11-18", "2026-11-20")
+    }
 }
 
 /** Any Kotlin value as the `JsAny` the upstream API expects. */
