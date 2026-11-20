@@ -132,7 +132,7 @@ internal class CalendarPage : DemoPage() {
         addLinkedSheet("themes/classic/theme.css")
 
         val section = sectionBlock()
-        texts.bind(section.title, { it.calendarHeading })
+        texts.bind(section.heading, { it.calendarHeading })
         texts.bind(section.hint, { it.hint })
         section.body.append(
             grid(minColumnWidth = 150, *buttons.toTypedArray()),
