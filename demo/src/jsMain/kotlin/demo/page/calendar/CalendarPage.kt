@@ -32,20 +32,6 @@ import web.events.addHandler
 import web.html.HTMLElement
 import web.html.HtmlTagName
 
-/** Every string this page shows, in one language. */
-private class CalendarTexts(
-    val title: String,
-    val summary: String,
-    val calendarHeading: String,
-    val hint: String,
-    /** The toolbar labels, in the order of [ACTIONS]. */
-    val labels: List<String>,
-    /** The readout's prefix: `Current view`. */
-    val view: String,
-    /** The three sample events, in the order the page adds them. */
-    val events: List<String>,
-)
-
 private val calendarEnglish: CalendarTexts = CalendarTexts(
     title = "Calendar",
     summary = "The real FullCalendar engine behind the wrapper: a month grid with three events, a " +
@@ -74,9 +60,6 @@ private val calendarTexts: Translations<CalendarTexts> = texts(
     Langs.EN to calendarEnglish,
     Langs.ZH_HANS to calendarChinese,
 )
-
-/** One toolbar button: the command it runs on the calendar. */
-private class Action(val id: String, val run: (CalendarPage, Calendar) -> Unit)
 
 private val ACTIONS: List<Action> = listOf(
     Action("prev") { page, calendar -> calendar.prev(); page.refresh(calendar) },
@@ -122,7 +105,6 @@ internal class CalendarPage : DemoPage() {
     private val buttons: List<ButtonElement> = ACTIONS.map { action ->
         createButton { setAttribute("data-action", action.id) }
     }
-
 
     init {
         addLinkedSheet("skeleton.css")
