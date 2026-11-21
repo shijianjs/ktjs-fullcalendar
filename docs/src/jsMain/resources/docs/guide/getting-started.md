@@ -41,6 +41,14 @@ calendarOptions {
 
 Kotlin/JS would turn a `@JsModule` + `@JsName` declaration into a *default import*, so each sub-path is bound as an external object whose `default` member Kotlin compiles into a namespace import — that is the only form that works for a package without named exports.
 
+```mermaid
+flowchart LR
+    DEP["ktjs-fullcalendar + kotlin-browser"] --> OBJ["each sub-path bound as an external object<br/>its default member compiles into a namespace import"]
+    OBJ --> P["plugins = arrayOf(dayGridPlugin)"]
+    P --> C["createCalendar(host, calendarOptions { … })<br/>a one-line new shim"]
+    C --> A["addEvent(eventInput { … })"]
+```
+
 ## First call
 
 ```kotlin

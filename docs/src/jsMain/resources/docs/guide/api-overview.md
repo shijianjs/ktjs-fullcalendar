@@ -13,6 +13,14 @@ title: API overview
 | `…fullcalendar.core` | `Calendar`, `CalendarOptions`, `ToolbarInput`, the `calendarOptions` / `toolbar` / `eventInput` builders |
 | `…fullcalendar.core` | `EventInput`, `EventApi`, `EventSourceApi`, `ViewApi`, `EventClickInfo`, `DateClickInfo`, `DateSelectInfo`, and the `DateInput` / `DurationInput` / `FormatterInput` unions |
 
+```mermaid
+flowchart LR
+    MOD["six sub-path module objects<br/>dayGrid / timeGrid / multiMonth / list / interaction / all"] --> PLUG["plugins = arrayOf(dayGridPlugin, interactionPlugin)"]
+    OPT["calendarOptions / toolbar / eventInput builders"] --> CAL
+    PLUG --> CAL["createCalendar(host, options)"]
+    CAL --> API["addEvent / getEvents / changeView / EventApi / ViewApi"]
+```
+
 ## Conventions this wrapper follows
 
 - Named or default exports that a package does not expose as ES named bindings are reached through

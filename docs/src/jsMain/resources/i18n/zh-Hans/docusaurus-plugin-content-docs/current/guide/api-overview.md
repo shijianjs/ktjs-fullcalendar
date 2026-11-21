@@ -13,6 +13,14 @@ title: API 概览
 | `…fullcalendar.core` | `Calendar`、`CalendarOptions`、`ToolbarInput`，以及 `calendarOptions` / `toolbar` / `eventInput` 构造器 |
 | `…fullcalendar.core` | `EventInput`、`EventApi`、`EventSourceApi`、`ViewApi`、`EventClickInfo`、`DateClickInfo`、`DateSelectInfo`，以及 `DateInput` / `DurationInput` / `FormatterInput` 联合类型 |
 
+```mermaid
+flowchart LR
+    MOD["六个 sub-path 模块对象<br/>dayGrid / timeGrid / multiMonth / list / interaction / all"] --> PLUG["plugins = arrayOf(dayGridPlugin, interactionPlugin)"]
+    OPT["calendarOptions / toolbar / eventInput 构建器"] --> CAL
+    PLUG --> CAL["createCalendar(host, options)"]
+    CAL --> API["addEvent / getEvents / changeView / EventApi / ViewApi"]
+```
+
 ## 本 wrapper 的约定
 
 - 包没有以 ES 具名绑定形式暴露的导出，都通过 external object 取：Kotlin 会把

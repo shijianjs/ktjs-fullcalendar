@@ -40,6 +40,14 @@ calendarOptions {
 
 Kotlin/JS 会把 `@JsModule` + `@JsName` 声明编译成**默认导入**，所以每个子路径都绑定成 external object，其 `default` 成员被编译成命名空间导入 —— 这是没有具名导出的包唯一可行的写法。
 
+```mermaid
+flowchart LR
+    DEP["ktjs-fullcalendar + kotlin-browser"] --> OBJ["每个 sub-path 绑成外部对象<br/>default 成员编译成命名空间导入"]
+    OBJ --> P["plugins = arrayOf(dayGridPlugin)"]
+    P --> C["createCalendar(host, calendarOptions { … })<br/>一行 new shim"]
+    C --> A["addEvent(eventInput { … })"]
+```
+
 ## 第一个调用
 
 ```kotlin
