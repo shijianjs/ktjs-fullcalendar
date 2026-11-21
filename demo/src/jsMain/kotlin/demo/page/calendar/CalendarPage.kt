@@ -12,7 +12,6 @@ import io.github.shijianjs.ktjs.demo.page.SectionBlock
 import io.github.shijianjs.ktjs.demo.page.Readout
 import io.github.shijianjs.ktjs.dom.element.invoke
 import io.github.shijianjs.ktjs.dom.element.unaryPlus
-import io.github.shijianjs.ktjs.dom.webcomponent.CustomElementReferenceAdapter
 import io.github.shijianjs.ktjs.fullcalendar.classicThemePlugin
 import io.github.shijianjs.ktjs.fullcalendar.createCalendar
 import io.github.shijianjs.ktjs.fullcalendar.core.Calendar
@@ -161,7 +160,7 @@ internal class CalendarPage : DemoPage() {
         refresh(created)
     }
 
-    companion object : CustomElementReferenceAdapter<CalendarPage>(CalendarPage::class.js, "fullcalendar-calendar-page") {
+    companion object : CalendarPageDefaultReference() {
         private val calendarEnglish: CalendarTexts = CalendarTexts(
             title = "Calendar",
             summary = "The real FullCalendar engine behind the wrapper: a month grid with three events, a " +
